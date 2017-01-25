@@ -48,7 +48,6 @@ class BrunchStaticStuff
 
     outFile = filename.replace /.static.pug$/, '.html'
     console.log "Wrote to #{outFile}", out.dependencies
-    console.log out
 
     cb(null, [{filename: outFile, content: c.html()}], out.dependencies)
 
