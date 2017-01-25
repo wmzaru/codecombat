@@ -1,0 +1,48 @@
+extends layout.static.pug
+
+block setup
+    - serverConfig = {codeNinja: false, static: true}
+    - features = {playViewsOnly: false}
+    - me = {}
+    - me.isStudent = function() { return false; }
+    - me.isAnonymous = function() { return true; }
+    - me.isTeacher = function() { return false; }
+    - me.isAdmin = function() { return false; }
+    - me.level = function() { return 1; }
+    - me.gems = function() { return 0; }
+    - me.getPhotoURL = function() { return ''; }
+    - me.displayName = function() { return ''; }
+    - me.broadName = function() { return ''; }
+    - me.get = function(prop) { return me[prop]; }
+    - me.isOnPremiumServer = function() { return false; }
+    - view = {}
+    - view.forumLink = function() { return 'http://discourse.codecombat.com/'; }
+    - view.isMobile = function() { return false; }
+    - view.showAds = function() { return false; }
+    - view.isOldBrowser = function() { return false; }
+    - view.isIPadBrowser = function() { return false; }
+
+block script-start
+    script window.alreadyLoadedView = "#{viewName}";
+    script.
+        function onLoad() {
+            console.log("Okay!")
+            realOnLoad();
+        }
+
+        function realOnLoad() {
+        try {
+            // IE10 warning
+            var htmlElement = document.querySelector("html");
+            if (htmlElement) {
+                if ($.browser.msie && $.browser.versionNumber < 11) {
+                    if ((window.location.pathname || "").indexOf("web-dev-level") < 0) {
+                        alert("CodeCombat does not run in Internet Explorer 10 or older. Sorry!");
+                    }
+                }
+            }
+            // IE8 can't handle this
+            FastClick.attach(document.body);
+        } catch (error) { }
+            require('core/initialize');
+        }
