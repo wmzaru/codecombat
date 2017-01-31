@@ -7,26 +7,24 @@ var main = connect(auth.main.uri, auth.main.user, auth.main.password);
 
 // Find all users who were created between 2 weeks ago and last week
 
-const START_DAYS_AGO = 14;
-const END_DAYS_AGO = 7;
+const START_DATE = '2017-01-20T00:00:00';
+const END_DAYS = 7;
 const WINDOW_DAYS = 7;
 
 function objectIdFromDate(date) {
   return ObjectId(Math.floor(date.getTime() / 1000).toString(16) + "0000000000000000");
 }
 
-print("Getting all users created between", START_DAYS_AGO, "and", END_DAYS_AGO, "days ago...");
+var startDate = new Date(START_DATE);
+var endDate = new Date();
+endDate.setDate(startDate.getDate() + END_DAYS);
+endDate.setHours(0, 0, 0, 0);
 
-var twoWeeksAgo = new Date();
-twoWeeksAgo.setDate(twoWeeksAgo.getDate() - START_DAYS_AGO);
-twoWeeksAgo.setHours(0, 0, 0, 0);
+print("Start Date:", startDate.toString());
+print("End Date  :", endDate.toString());
 
-var oneWeekAgo = new Date();
-oneWeekAgo.setDate(oneWeekAgo.getDate() - END_DAYS_AGO);
-oneWeekAgo.setHours(0, 0, 0, 0);
-
-var fromId = objectIdFromDate(twoWeeksAgo);
-var toId = objectIdFromDate(oneWeekAgo);
+var fromId = objectIdFromDate(startDate);
+var toId = objectIdFromDate(endDate);
 
 var users = main.users.find({ _id: { $gte: fromId, $lt: toId }});
 
